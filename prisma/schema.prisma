@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model users {
+//   user_id         Int      @id @default(autoincrement())
+//   full_name       String?
+//   email           String   @unique
+//   hash            String?
+//   phone           String?
+//   address         String?
+//   DOB             String?
+//   acount_telegram String?
+//   role_id         Int?
+//   created_date    DateTime @default(now())
+//   created_by      Int?
+//   modify_by       Int?
+//   modify_date     DateTime @updatedAt
+//   is_delete       Boolean?
+
+//   blogs    blogs[]
+//   accouts  accouts[]
+//     bookmark bookmark[]
+// }
+model users {
+  user_id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash  String
+
+  firstName String?
+  lastName  String?
+  bookmarks bookmark[]
+}
+
+model bookmark {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  link        String
+
+  user_id Int
+  users   users @relation(fields: [user_id], references: [user_id])
+}
+
+model blogs {
+  blog_id      Int      @id @default(autoincrement())
+  user_id      Int
+  content      String
+  title        String
+  image        String?
+  description  String?
+  author       String?
+  type         String?
+  created_date DateTime @default(now())
+  created_by   Int?
+  modify_by    Int?
+  modify_date  DateTime @updatedAt
+  is_public    Boolean?
+  is_delete    Boolean?
+  // users        users    @relation(fields: [user_id], references: [user_id])
+}
+
+model accouts {
+  acount_id   Int    @id @default(autoincrement())
+  acount_name String
+  password    String @unique
+  role_id     Int
+  user_id     Int
+  // users       users  @relation(fields: [user_id], references: [user_id])
+}
